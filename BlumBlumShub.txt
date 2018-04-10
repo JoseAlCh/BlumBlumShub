@@ -1,29 +1,193 @@
+#Exporta las librerias necesarias para la parte gráfica
+from tkinter import *
+
 #p,q Dos numeros primos grandes
 #p,q Deben ser congruentes a 3 mod 4
 #x0  Es la semilla a usar (debe estar en binario)
 #i   Es el numero de bits a incluir en la secuencia
 
+def monobit(self, bin_data: str):
+    """
+    Note that this description is taken from the NIST documentation [1]
+    [1] http://csrc.nist.gov/publications/nistpubs/800-22-rev1a/SP800-22rev1a.pdf
+  
+    The focus of this test is the proportion of zeros and ones for the entire sequence. The purpose of this test is
+    to determine whether the number of ones and zeros in a sequence are approximately the same as would be expected
+    for a truly random sequence. This test assesses the closeness of the fraction of ones to 1/2, that is the number
+    of ones and zeros ina  sequence should be about the same. All subsequent tests depend on this test.
+  
+    :param bin_data: a binary string
+    :return: the p-value from the test
+    """
+    count = 0
+    # If the char is 0 minus 1, else add 1
+    for char in bin_data:
+        if char == '0':
+            count -= 1
+        else:
+            count += 1
+    # Calculate the p value
+    sobs = count / math.sqrt(len(bin_data))
+    p_val = spc.erfc(math.fabs(sobs) / math.sqrt(2))
+    return p_val
+
 def dec_to_bin(x):
     return int(bin(x)[2:])
 
-def BlumBlumShub(p,q,x0,i):
-   num_dec = int(str(x0),2)
-   sec   = []
-   '''
-   print "Semilla X0 = ", x0, " en decimal = ", num_dec
-   print "Numero primo p = ", p
-   print "Numero primo q = ", q
-   print "Numero de bits en la secuencia a generar = ", i
-   '''
-   for var in range(1,i+1):
-     num_dec = num_dec*num_dec
-     num_dec = num_dec % (p*q)
-     bit   = str(dec_to_bin(num_dec))
-     bit   = bit[-1:]
-     sec.append(bit)
-     print  var,num_dec, str(dec_to_bin(num_dec)),bit
-   sec = ''.join(sec)
-   print sec
-   return
+def BlumBlumShub():
 
-BlumBlumShub(11,19,11,5)
+  try:
+    num_dec = int(str(e3.get()),2)
+    sec   = []
+    for var in range(1,(int(e4.get())+1)):
+      num_dec = num_dec*num_dec
+      num_dec = num_dec % (int(e1.get())*int(e2.get()))
+      bit   = str(dec_to_bin(num_dec))
+      bit   = bit[-1:]
+      sec.append(bit)
+      print  (var,num_dec, str(dec_to_bin(num_dec)),bit)
+    sec = ''.join(sec)
+    e5.delete(0,len(e5.get()))
+    #insert coloca la cadena 
+    e5.insert(0,str(sec))
+    #Verifica que la cadena sea buena
+    return
+
+  except ValueError:
+    #Declaro un objeto de la clase Text
+    texto=Text(v)
+    #Inserto el mensaje
+    texto.insert(INSERT,"Debes introducir una cadena que sea un número")
+    #Posiciono el mensaje
+    texto.place(x=10,y=300)
+
+  except Exception as e:
+    print(type(e).__name__)
+
+#def BlumBlumShub(p,q,x0,i):
+   #num_dec = int(str(x0),2)
+   #sec   = []
+   
+   #print "Semilla X0 = ", x0, " en decimal = ", num_dec
+   #print "Numero primo p = ", p
+   #print "Numero primo q = ", q
+   #print "Numero de bits en la secuencia a generar = ", i
+   
+   #for var in range(1,i+1):
+     #num_dec = num_dec*num_dec
+     #num_dec = num_dec % (p*q)
+     #bit   = str(dec_to_bin(num_dec))
+     #bit   = bit[-1:]
+     #sec.append(bit)
+     #print  (var,num_dec, str(dec_to_bin(num_dec)),bit)
+   #sec = ''.join(sec)
+   #print (sec)
+   #return
+
+
+#Aqui declaramos nuestra ventana principal
+v=Tk()
+
+########################################################
+######Declaramos las entradas de nuestro programa#######
+########################################################
+
+#Crea un objeto de tipo label que es solo el texto que se muestra
+#La funcion recibe la ventana donde estara y el texto a mostrar
+l1=Label(v,text="Inserta un número primo p")
+#Posiciono mi objeto
+l1.place(x=10,y=10)
+#Creo la entrada 
+#La funcion recibe la ventana donde estara y su tamaño
+e1=Entry(v,bd=5)
+#Posiciono mi entrada
+e1.place(x=200,y=10)
+
+#Crear un objeto de tipo label que es solo el texto que se muestra
+#La funcion recibe la ventana donde estara y el texto a mostrar
+l2=Label(v,text="Inserta un número primo q")
+#Posiciono mi ventana
+l2.place(x=10,y=50)
+#Creo la entrada
+#La funcion recibe la ventana donde estara y su tamaño
+e2=Entry(v,bd=5)
+#Posiciono mi entrada
+e2.place(x=200,y=50)
+
+#Crea un objeto de tipo label que es solo el texto que se muestra
+#La funcion recibe la ventana donde estara y el texto a mostrar
+l3=Label(v,text="Inserta la semilla inicial en binario")
+#Posiciono mi objeto
+l3.place(x=10,y=90)
+#Creo la entrada 
+#La funcion recibe la ventana donde estara y su tamaño
+e3=Entry(v,bd=5)
+#Posiciono mi entrada
+e3.place(x=200,y=90)
+
+#Crear un objeto de tipo label que es solo el texto que se muestra
+#La funcion recibe la ventana donde estara y el texto a mostrar
+l4=Label(v,text="Indica el número de bits")
+#Posiciono mi ventana
+l4.place(x=10,y=130)
+#Creo la entrada
+#La funcion recibe la ventana donde estara y su tamaño
+e4=Entry(v,bd=5)
+#Posiciono mi entrada
+e4.place(x=200,y=130)
+
+#########################################################
+##########Declaro el boton accionador####################
+#########################################################
+#Creo el botón
+b=Button(v,text="Calcular",command=BlumBlumShub)
+#Posiciono el botón
+b.place(x=230,y=170)
+
+#########################################################
+##############Declaramos las salidas#####################
+#########################################################
+
+#Crear un objeto de tipo label que es solo el texto que se muestra
+#La funcion recibe la ventana donde estara y el texto a mostrar
+l5=Label(v,text="Cadena resultante")
+#Posiciono mi ventana
+l5.place(x=10,y=210)
+#Creo la entrada
+#La funcion recibe la ventana donde estara y su tamaño
+e5=Entry(v,bd=5)
+#Posiciono la entrada
+e5.place(x=200,y=210)
+
+#BlumBlumShub(11,19,11,5)
+
+#Tamaño de la ventana
+v.geometry("250x250+10+10")
+#La ventana principal esta en un loop infinito porque no queremos que se cierre
+v.mainloop()
+
+
+#def dec_to_bin(x):
+    #return int(bin(x)[2:])
+
+#def BlumBlumShub(p,q,x0,i):
+   #num_dec = int(str(x0),2)
+   #sec   = []
+   #'''
+   #print "Semilla X0 = ", x0, " en decimal = ", num_dec
+   #print "Numero primo p = ", p
+   #print "Numero primo q = ", q
+   #print "Numero de bits en la secuencia a generar = ", i
+   #'''
+   #for var in range(1,i+1):
+     #num_dec = num_dec*num_dec
+     #num_dec = num_dec % (p*q)
+     #bit   = str(dec_to_bin(num_dec))
+     #bit   = bit[-1:]
+     #sec.append(bit)
+     #print  var,num_dec, str(dec_to_bin(num_dec)),bit
+   #sec = ''.join(sec)
+   #print sec
+   #return
+
+#BlumBlumShub(11,19,11,5)
