@@ -50,7 +50,6 @@ def BlumBlumShub():
     e5.delete(0,len(e5.get()))
     #insert coloca la cadena 
     e5.insert(0,str(sec))
-    #Verifica que la cadena sea buena
     return
 
   except ValueError:
